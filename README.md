@@ -2,35 +2,32 @@
 
 ![Moderation Map Lint cover](assets/readme-cover.svg)
 
-Check moderation policy maps for missing categories and escalation gaps.
+Check moderation policy maps for missing categories and escalation gaps. The command is intentionally direct so it can sit in a local review, a CI step, or a one-off audit.
 
-## The rule file is the product
+## Checks in plain language
 
-- `missing-action` (high): policy category has no action. Fix: Declare block, allow, escalate, or transform behavior..
-- `missing-human-review` (medium): human review path is missing. Fix: Define escalation criteria and owner..
-- `unknown-appeal` (low): appeal path is unclear. Fix: Document user appeal or review process..
+| Signal | Level | What it flags | Fix direction |
+| --- | --- | --- | --- |
+| `missing-action` | high | policy category has no action | Declare block, allow, escalate, or transform behavior. |
+| `missing-human-review` | medium | human review path is missing | Define escalation criteria and owner. |
+| `unknown-appeal` | low | appeal path is unclear | Document user appeal or review process. |
 
-Everything else in the repo exists to feed records into those checks and render the answer in a way a person can act on.
+## Tiny fixture
 
-## Shell session
+```text
+risky: category self-harm action missing human_review none appeal unknown
+clean: category self-harm action escalate human_review required appeal documented
+```
+
+## Local check
 
 ```bash
 git clone https://github.com/mertefekurt/moderation-map-lint.git
 cd moderation-map-lint
-python -m venv .venv
-source .venv/bin/activate
 python -m pip install -e ".[dev]"
 moderation-map-lint examples/sample.txt
-moderation-map-lint examples/sample.txt --json
 ```
 
-## Repository shape
+## Signal route
 
-```text
-.github/        CI workflow
-examples/       sample inputs
-src/            package source
-tests/          test coverage
-.gitignore      project file
-pyproject.toml  package metadata
-```
+![Workflow diagram](assets/readme-diagram.svg)
